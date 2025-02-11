@@ -5,12 +5,22 @@
 #include <vector>
 using namespace std;
 
-#include "point3D.h"
+#include "rayon.h"
 
+/**
+ * La classe Vue représente notre vision de la caméra
+ * La vision de cette caméra est définie par un matrice de Rayon qui vont devoir être parcouru pour actualiser la 
+ * couleur d'un matrice de pixel
+ */
 class Vue {
+    public :
+        Vue();
 
-private :
-    vector<vector<Point3D>> matrice_pixel;
+        ~Vue();
+
+    private :
+        vector<vector<Rayon>> matrice_rayon;
+        vector<vector<int>> matrice_pixel;
 };
 
 

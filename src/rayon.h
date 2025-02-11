@@ -4,15 +4,19 @@
 #include <string>
 using namespace std;
 
+/**
+ * La classe rayon définie une droite dans un espace 3D
+ * Un Rayon est définie par point et 
+ */
 class Rayon {
 public:
-    // Méthode virtuelle
-    Rayon(string name);
+    //Methode de creation
+    Rayon();
 
-    // Getter pour le nom de l'animal
+    //To string
     string toString();
 
-    // Destructeur virtuel
+    // Destructeur
     virtual ~Rayon();
 
 private :
