@@ -1,0 +1,8 @@
+dossier lib :
+    pour stocker la copie du google pour les test
+dossier src :
+    fichier C++ pour le projet
+dossier test :
+    fichier test unitaire de google
+
+Ne pas oublier de rajouter des CMake dans les autres parties de mon projets
