@@ -10,14 +10,16 @@
  */
 class Sphere : public Object {
     public :
-        Sphere();
+        // Constructeur
+        Sphere(); //Default
+        Sphere(const Point3D& C_ar, float Rayon); //Paramètre avec point
 
-        ~Sphere();
+        // Methode
+        void afficher() const; //affichage
 
     private :
-        Point3D C;
-        float R;
-        Couleurs colors;
+        Point3D C; //Point d'origne
+        float R; //Rayon de la sphère
 };
 
 #endif // SPHERE_H

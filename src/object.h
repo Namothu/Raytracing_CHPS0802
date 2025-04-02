@@ -2,7 +2,6 @@
 #define OBJECT_H
 
 #include <string>
-#include "color.h"
 using namespace std;
 
 /** 

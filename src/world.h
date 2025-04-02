@@ -19,6 +19,8 @@ class World {
         ~World();
         
         vector<Object> vecteur_all_object;
+
+        //Ne pas oublier ajouter la position de la lumière ici
 };
 
 #endif // WORLD_H
