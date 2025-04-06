@@ -1,12 +1,12 @@
 #include "Sphere.h"
 
 //Constructeur par default
-Sphere::Sphere() : C() {
+Sphere::Sphere() : Object(), C() {
     this->R = 1.0;
 }
 
 //Constructeur par paramètre
-Sphere::Sphere(const Point3D& C_ar, float Rayon) : C(C_ar), R(Rayon) {}
+Sphere::Sphere(const Point3D& C_ar, float Rayon) : Object(), C(C_ar), R(Rayon) {}
 
 // Méthode pour afficher les informations sur la sphère
 void Sphere::afficher() const {

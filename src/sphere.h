@@ -1,7 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "object.h"
+#include "Object.h"
 #include "Point3D.h"
 
 /** 
@@ -15,7 +15,7 @@ class Sphere : public Object {
         Sphere(const Point3D& C_ar, float Rayon); //Paramètre avec point
 
         // Methode
-        float Sphere::intersection(Rayon R) override;
+        float intersection(Rayon R) override;
         void afficher() const; //affichage
 
     private :

@@ -9,6 +9,7 @@
  * Le plan sera définis par un point A et une normale N
  * 
  */
+/*
 class Plan : public Object {
     public :
         Plan();
@@ -18,5 +19,6 @@ class Plan : public Object {
         Point3D A;
         //Normal a mettre mais je sais pas comment la mettre
 };
+*/
 
 #endif // PLAN_H

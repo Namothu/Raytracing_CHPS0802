@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include "Rayon.h"
+#include "Materiel.h"
 #include <iostream>
 #include <cmath>
 
@@ -11,10 +12,14 @@
  */
 class Object {
     public:
+        Object();
+        Object(const Materiel& mat);
+
         //Méthode virtuelle pour savoir si il y a une intersection avec un rayon
         virtual float intersection(Rayon R);
         //La méthode est virtuelle pour qu'elle soit redéfinie par chaque object c'est différent la méthode de calcul selon l'objet
 
+        Materiel material;
 };
 
 #endif // OBJECT_H
