@@ -15,7 +15,7 @@ class Sphere : public Object {
         Sphere(const Point3D& C_ar, float Rayon); //Paramètre avec point
 
         // Methode
-        float intersection(Rayon R) override;
+        float intersection(Rayon Ray) override;
         void afficher() const; //affichage
 
     private :

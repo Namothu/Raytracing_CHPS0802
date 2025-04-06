@@ -16,7 +16,7 @@ class Object {
         Object(const Materiel& mat);
 
         //Méthode virtuelle pour savoir si il y a une intersection avec un rayon
-        virtual float intersection(Rayon R);
+        virtual float intersection(Rayon Ray);
         //La méthode est virtuelle pour qu'elle soit redéfinie par chaque object c'est différent la méthode de calcul selon l'objet
 
         Materiel material;

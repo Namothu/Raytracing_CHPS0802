@@ -20,7 +20,7 @@ class World {
         //Flemme de faire un constructeur par copie juste on change la référence de la camera
 
         //Attribute
-        vector<Object> vecteur_all_object;
+        vector<Object*> vecteur_all_object;
         Vue camera;
 
         //Methode

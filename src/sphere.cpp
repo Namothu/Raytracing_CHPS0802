@@ -10,10 +10,12 @@ Sphere::Sphere(const Point3D& C_ar, float Rayon) : Object(), C(C_ar), R(Rayon) {
 
 // Méthode pour afficher les informations sur la sphère
 void Sphere::afficher() const {
-    std::cout << "Point Centre : ";
+    std::cout << "Sphere : \n";
+    std::cout << "  Point Centre : ";
     C.afficher();
-    std::cout << "Rayon : ";
+    std::cout << "  Rayon : ";
     std::cout << R;
+    std::cout << "\n";
 }
 
 //Calcul t d'intersection entre la Sphère et un Rayon | Renvois -1 si pas trouver
@@ -36,12 +38,16 @@ float Sphere::intersection(Rayon Ray) {
     //cas ou on retire notre discriminant
     float t2 = (-b-sqrt((b*b)-(4*a*c)))/(2*a);
 
+    //Affichage de debug
+    //std::cout << "T1 et T2 : " << t1 << t2 << std::endl;
+
     float t = -1.0;
-    if ((t1 < t2) && (t1 > 0.0)) {
-        t = t1;
-    }
-    if ((t2 <= t1) && (t2 > 0.0)) {
-        t = t2;
+    if (t1 >= 0.0) {
+        if ((t2 < t1) && (t2 >= 0.0)) {
+            t = t2;
+        } else {
+            t = t1;
+        }
     }
 
     return t;

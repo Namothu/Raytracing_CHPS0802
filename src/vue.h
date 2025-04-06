@@ -20,7 +20,7 @@ class Vue {
         Vue(int reso,const Point3D& point1,const Point3D& point2,const Point3D& point3); //par paramètre
 
         // Methode
-        void calculate_matrice_pixel(vector<Object>); //permet de calculer la couleur que chaque rayon retourne
+        void calculate_matrice_pixel(vector<Object*>); //permet de calculer la couleur que chaque rayon retourne
         //void calculate_matrice_pixel_gpu(vector<Object>); //permet de calculer la couleur que chaque rayon retourne mais en gpu
         void enregistrer_matrice_pixel(const string& nomFichier); //enregistre la matrice de pixel en image ppm
 
@@ -33,6 +33,7 @@ class Vue {
         std::array<int, 2> resolution; //[Hauteur,Largeur] pixel | Rayon
         //Attention a utiliser par ajout de X*i, Y*j et Z*(i+j)
         std::array<float, 3> ecart_rayon; //calcul de l'ecart entre A et C le tout diviser par le nombre de rayon en largeur et longueur (X,Y)
+        float distance_max_vision = 100000.0; //Distance après laquelle on affiche plus le pixel
 };
 
 

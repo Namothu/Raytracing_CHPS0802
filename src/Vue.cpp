@@ -58,8 +58,12 @@ Vue::Vue(int reso,const Point3D& point1,const Point3D& point2,const Point3D& poi
     int z4= point2.getZ() + point1.getZ() - point2.getZ() + point3.getZ() - point2.getZ();
     position_cadre[3] = Point3D(x4,y4,z4);
 
+    position_cadre[3].afficher();
+
     //On définie le vecteur normale de ce cadre
     vecteur_normal_cadre = Vecteur3D::calcul_normale_3point(position_cadre[0],position_cadre[1],position_cadre[2]);
+
+    vecteur_normal_cadre.afficher();
 
     //On va calculer les écart que nous allons mettre entre nos rayon
     //Ecart des X diviser par le nombre de rayon en resolution[0]
@@ -84,7 +88,46 @@ Vue::Vue(int reso,const Point3D& point1,const Point3D& point2,const Point3D& poi
     }
 }
 
-void calculate_matrice_pixel(vector<Object>) {
+void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects) {
+    //On commence la boucle principal qui va parcourir chaque rayon pour trouver la couleur de notre pixel
+    // indice de l'objet le plus proche
+    int object_plus_proche;
+    // distance de l'objet le plus proche
+    float t_min;
+    // distance de l'objet courant
+    float t_tmp;
+
+    //On parcour les rayons
+    for (int i = 0; i < matrice_rayon.size(); i++) {
+        for (int j = 0; j < matrice_rayon[i].size(); j++) {
+            object_plus_proche = -1;
+            t_min = distance_max_vision;
+
+            //Une fois que nous avons un rayon nous allons définir la couleur qu'il est senser renvoyer
+            //Pour cela il faut trouver quel objet il percute en premier
+            for (int obj_curr = 0; obj_curr < listes_des_objects.size(); obj_curr++)  {
+                t_tmp = listes_des_objects[obj_curr]->intersection(matrice_rayon[i][j]);
+                //std::cout << "test" << t_tmp << t_min << "\n";
+                if ((t_tmp >= 0.0) && (t_tmp < t_min)) {
+                    t_min = t_tmp;
+                    object_plus_proche = obj_curr;
+                }
+            }
+
+            //Une fois que l'intersection a été calculer on affecte la couleur
+            if (object_plus_proche >= 0) {
+                //Un objet à été trouved on récupère sa couleur
+                matrice_pixel[i][j][0] = listes_des_objects[object_plus_proche]->material.r;
+                matrice_pixel[i][j][1] = listes_des_objects[object_plus_proche]->material.g;
+                matrice_pixel[i][j][2] = listes_des_objects[object_plus_proche]->material.b;
+            } else {
+                //On a rien trouver donc on met tout à noir
+                matrice_pixel[i][j][0] = 0;
+                matrice_pixel[i][j][1] = 0;
+                matrice_pixel[i][j][2] = 0;
+            }
+        }
+    }
 
 }
 

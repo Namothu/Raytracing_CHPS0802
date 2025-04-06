@@ -7,16 +7,17 @@ class Materiel
 public:
     // Constructeur
     Materiel(); //default constructor
-    Materiel(float r, float g, float b); //constructor with parameters
+    Materiel(int r, int g, int b); //constructor with parameters
     Materiel(const Materiel& m); //copy constructor
 
     // Methodes
+    void setColor(int r, int g, int b);
     void afficher() const; //print the color of the material
 
     //Variables
-    float r; //rouge
-    float g; //vert
-    float b; //bleu
+    int r; //rouge
+    int g; //vert
+    int b; //bleu
 };
 
 
