@@ -16,9 +16,9 @@ class Point3D {
         Point3D::Point3D(const Point3D& p); //par copie
 
         //Getter
-        float getX();
-        float getY();
-        float getZ();
+        float getX() const;
+        float getY() const;
+        float getZ() const;
 
         //Methodes
         void afficher() const; //Affiche

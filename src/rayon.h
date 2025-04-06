@@ -13,13 +13,12 @@ class Rayon {
 public:
     // Constructeur
     Rayon(); // par default
-    Rayon(const Point3D& origine, const Vecteur3D& direction); // par paramètre 
+    Rayon(const Point3D& origine, const Vecteur3D& direction); // par paramètre
 
     //Méthode
     Point3D point_at_t(float t); //pour obtenir le point du rayon à un instant donné (t)
     void afficher() const; //affichage
 
-private :
     Point3D origine;     // Point de départ du rayon
     Vecteur3D direction; // Vecteur directionnel du rayon
 };

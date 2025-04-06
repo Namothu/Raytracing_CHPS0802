@@ -2,7 +2,7 @@
 #define SPHERE_H
 
 #include "object.h"
-#include "point3D.h"
+#include "Point3D.h"
 
 /** 
  * Classe qui hérite de Object qui représente une sphère
@@ -15,6 +15,7 @@ class Sphere : public Object {
         Sphere(const Point3D& C_ar, float Rayon); //Paramètre avec point
 
         // Methode
+        float Sphere::intersection(Rayon R) override;
         void afficher() const; //affichage
 
     private :

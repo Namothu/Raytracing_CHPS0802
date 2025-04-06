@@ -1,8 +1,9 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <string>
-using namespace std;
+#include "Rayon.h"
+#include <iostream>
+#include <cmath>
 
 /** 
  *Cette classe Object à pour but d'être la classe mère de tout les objets qui seront contenue dans un world
@@ -11,11 +12,8 @@ using namespace std;
 class Object {
     public:
         //Méthode virtuelle pour savoir si il y a une intersection avec un rayon
-        virtual float intersection();
+        virtual float intersection(Rayon R);
         //La méthode est virtuelle pour qu'elle soit redéfinie par chaque object c'est différent la méthode de calcul selon l'objet
-
-        // Pour avoir un affichage de l'objet
-        virtual string toString();
 
 };
 

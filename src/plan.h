@@ -17,7 +17,6 @@ class Plan : public Object {
     private :
         Point3D A;
         //Normal a mettre mais je sais pas comment la mettre
-        Couleurs colors;
 };
 
 #endif // PLAN_H

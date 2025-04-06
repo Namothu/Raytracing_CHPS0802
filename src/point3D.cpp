@@ -26,14 +26,14 @@ float Point3D::distance(const Point3D& p2) const {
     return sqrt((x - p2.x) * (x - p2.x) + (y - p2.y) * (y - p2.y) + (z - p2.z) * (z - p2.z));
 }
 
-float Point3D::getX() {
+float Point3D::getX() const {
     return this->x;
 }
 
-float Point3D::getY() {
+float Point3D::getY() const {
     return this->y;
 }
 
-float Point3D::getZ() {
+float Point3D::getZ() const {
     return this->z;
 }
