@@ -17,6 +17,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # Ajouter l'exécutable avec sur le fichier main.cpp
-add_executable(MyRaytracing src/main.cpp ${SOURCES})
+add_executable(MyRaytracing src/main_test.cpp ${SOURCES})
 
 #Faire en sorte qu'il ai 3 scenario

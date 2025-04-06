@@ -24,7 +24,7 @@ class World {
         Vue camera;
 
         //Methode
-        //je sais pas trop ce que je vais mettre dedans pour l'instant
+        void generate_img(const string& nomFichier);
 
         //Ne pas oublier ajouter la position de la lumière ici
     
