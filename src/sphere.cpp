@@ -53,7 +53,7 @@ float Sphere::intersection(Rayon Ray) {
     return t;
 }
 
-Materiel Sphere::calculerCouleur(const Point3D& point, Light* light) {
+Materiel Sphere::calculerCouleur(const Point3D& point, Light* light, float lumiere_ambiante) {
     //On calcule la normale à la sphère en ce point
     Vecteur3D normale = Vecteur3D(C, point);  // Normal = point - centre de la sphère
     normale = normale * (1.0f / normale.produitScalaire(normale));  // Normalisation
@@ -70,10 +70,9 @@ Materiel Sphere::calculerCouleur(const Point3D& point, Light* light) {
     float intensite_physique = light->getLightIntensityAtPoint(point);
 
     // On calcule la couleur du point
-    int r = std::min(static_cast<int>((material.r * intensite_physique * intensite_angle)+(material.r*0.1)),250);
-    int g = std::min(static_cast<int>((material.g * intensite_physique * intensite_angle)+(material.g*0.1)),250);
-    int b = std::min(static_cast<int>((material.b * intensite_physique * intensite_angle)+(material.b*0.1)),250);
-    //On rajoute 10% de la couleur de base pour voir les formes et donner la valeur de la lumière ambiante
+    int r = std::min(static_cast<int>((material.r * intensite_physique * intensite_angle)+(material.r*lumiere_ambiante)),250);
+    int g = std::min(static_cast<int>((material.g * intensite_physique * intensite_angle)+(material.g*lumiere_ambiante)),250);
+    int b = std::min(static_cast<int>((material.b * intensite_physique * intensite_angle)+(material.b*lumiere_ambiante)),250);
 
     //std::cout << intensite_physique << intensite_angle << intensite_physique * intensite_angle << "\n";
 

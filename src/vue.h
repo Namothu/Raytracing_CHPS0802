@@ -20,7 +20,7 @@ class Vue {
         Vue(int reso,const Point3D& point1,const Point3D& point2,const Point3D& point3); //par paramètre
 
         // Methode
-        void calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * light); //permet de calculer la couleur que chaque rayon retourne
+        void calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * light,float lumiere_ambiante); //permet de calculer la couleur que chaque rayon retourne
         //void calculate_matrice_pixel_gpu(vector<Object>); //permet de calculer la couleur que chaque rayon retourne mais en gpu
         void enregistrer_matrice_pixel(const string& nomFichier); //enregistre la matrice de pixel en image ppm
 

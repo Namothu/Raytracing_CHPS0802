@@ -18,7 +18,7 @@ class Object {
 
         //Méthode virtuelle pour savoir si il y a une intersection avec un rayon
         virtual float intersection(Rayon Ray);
-        virtual Materiel calculerCouleur(const Point3D& point, Light* light);
+        virtual Materiel calculerCouleur(const Point3D& point, Light* light, float lumiere_ambiante);
         //La méthode est virtuelle pour qu'elle soit redéfinie par chaque object c'est différent la méthode de calcul selon l'objet
 
         Materiel material;

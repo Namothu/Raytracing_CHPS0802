@@ -24,6 +24,7 @@ class World {
         vector<Object*> vecteur_all_object;
         Vue camera;
         Light lumiere_divine;
+        float lumiere_ambiante;
 
         //Methode
         void generate_img(const string& nomFichier);

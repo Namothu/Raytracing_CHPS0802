@@ -88,7 +88,7 @@ Vue::Vue(int reso,const Point3D& point1,const Point3D& point2,const Point3D& poi
     }
 }
 
-void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * light) {
+void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * light, float lumiere_ambiante) {
     //On commence la boucle principal qui va parcourir chaque rayon pour trouver la couleur de notre pixel
     // indice de l'objet le plus proche
     int object_plus_proche;
@@ -122,7 +122,7 @@ void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * li
                 Point3D P = matrice_rayon[i][j].point_at_t(t_min);
 
                 //une fois qu'on a tout on lance le calcul et affecte la couleur
-                Materiel M = listes_des_objects[object_plus_proche]->calculerCouleur(P,light);
+                Materiel M = listes_des_objects[object_plus_proche]->calculerCouleur(P,light,lumiere_ambiante);
                 matrice_pixel[i][j][0] = M.r;
                 matrice_pixel[i][j][1] = M.g;
                 matrice_pixel[i][j][2] = M.b;

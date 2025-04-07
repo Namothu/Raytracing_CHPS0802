@@ -17,7 +17,7 @@ class Sphere : public Object {
         // Methode
         float intersection(Rayon Ray) override;
         void afficher() const; //affichage
-        Materiel calculerCouleur(const Point3D& point, Light * light) override;
+        Materiel calculerCouleur(const Point3D& point, Light * light, float lumiere_ambiante) override;
 
     private :
         Point3D C; //Point d'origne
