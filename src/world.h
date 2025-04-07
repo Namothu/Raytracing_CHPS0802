@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "Object.h"
+#include "Light.h"
 #include "Vue.h"
 using namespace std;
 
@@ -22,11 +23,10 @@ class World {
         //Attribute
         vector<Object*> vecteur_all_object;
         Vue camera;
+        Light lumiere_divine;
 
         //Methode
         void generate_img(const string& nomFichier);
-
-        //Ne pas oublier ajouter la position de la lumière ici
     
 };
 

@@ -1,5 +1,5 @@
-#ifndef Materiel_H
-#define Materiel_H
+#ifndef MATERIEL_H
+#define MATERIEL_H
 
 
 class Materiel
@@ -20,8 +20,4 @@ public:
     int b; //bleu
 };
 
-
-
-
-
-#endif
+#endif //MATERIEL_H

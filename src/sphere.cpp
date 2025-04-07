@@ -52,3 +52,30 @@ float Sphere::intersection(Rayon Ray) {
 
     return t;
 }
+
+Materiel Sphere::calculerCouleur(const Point3D& point, Light* light) {
+    //On calcule la normale à la sphère en ce point
+    Vecteur3D normale = Vecteur3D(C, point);  // Normal = point - centre de la sphère
+    normale = normale * (1.0f / normale.produitScalaire(normale));  // Normalisation
+    //normale.afficher();
+
+    //On calcule le vecteur lumière (direction de la lumière vers le point)
+    Vecteur3D directionLumiere = Vecteur3D(point, light->position);  // Lumière - Point
+    directionLumiere = directionLumiere * (1.0f / directionLumiere.produitScalaire(directionLumiere));  // Normalisation
+    //directionLumiere.afficher();
+
+    //on calcule l'intensité lumineuse en fonction de l'angle entre la normale et la lumière
+    float intensite_angle = std::max(normale.produitScalaire(directionLumiere), 0.0f);  // Produit scalaire normalisé
+
+    float intensite_physique = light->getLightIntensityAtPoint(point);
+
+    // On calcule la couleur du point
+    int r = std::min(static_cast<int>((material.r * intensite_physique * intensite_angle)+(material.r*0.1)),250);
+    int g = std::min(static_cast<int>((material.g * intensite_physique * intensite_angle)+(material.g*0.1)),250);
+    int b = std::min(static_cast<int>((material.b * intensite_physique * intensite_angle)+(material.b*0.1)),250);
+    //On rajoute 10% de la couleur de base pour voir les formes et donner la valeur de la lumière ambiante
+
+    //std::cout << intensite_physique << intensite_angle << intensite_physique * intensite_angle << "\n";
+
+    return Materiel(r, g, b);
+}

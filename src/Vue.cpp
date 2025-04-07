@@ -88,7 +88,7 @@ Vue::Vue(int reso,const Point3D& point1,const Point3D& point2,const Point3D& poi
     }
 }
 
-void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects) {
+void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * light) {
     //On commence la boucle principal qui va parcourir chaque rayon pour trouver la couleur de notre pixel
     // indice de l'objet le plus proche
     int object_plus_proche;
@@ -117,9 +117,15 @@ void Vue::calculate_matrice_pixel(vector<Object*> listes_des_objects) {
             //Une fois que l'intersection a été calculer on affecte la couleur
             if (object_plus_proche >= 0) {
                 //Un objet à été trouved on récupère sa couleur
-                matrice_pixel[i][j][0] = listes_des_objects[object_plus_proche]->material.r;
-                matrice_pixel[i][j][1] = listes_des_objects[object_plus_proche]->material.g;
-                matrice_pixel[i][j][2] = listes_des_objects[object_plus_proche]->material.b;
+
+                //Pour calculer la couleur il nous faut une lumière et le point d'intersection de l'objet
+                Point3D P = matrice_rayon[i][j].point_at_t(t_min);
+
+                //une fois qu'on a tout on lance le calcul et affecte la couleur
+                Materiel M = listes_des_objects[object_plus_proche]->calculerCouleur(P,light);
+                matrice_pixel[i][j][0] = M.r;
+                matrice_pixel[i][j][1] = M.g;
+                matrice_pixel[i][j][2] = M.b;
             } else {
                 //On a rien trouver donc on met tout à noir
                 matrice_pixel[i][j][0] = 0;
