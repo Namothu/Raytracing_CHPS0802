@@ -1,24 +1,33 @@
 #ifndef PLAN_H
 #define PLAN_H
 
-#include "object.h"
-#include "point3D.h"
+#include "Object.h"
+#include "Point3D.h"
+#include "Vecteur3D.h"
+#include "Rayon.h"
+#include "Materiel.h"
 
 /**
  * Hérite de Object défnie un plan dans un espace 3D
  * Le plan sera définis par un point A et une normale N
  * 
  */
-/*
+
 class Plan : public Object {
     public :
-        Plan();
+        // Constructeur
+        Plan(); //Default
+        Plan(const Point3D& a,const Vecteur3D& norm); //Paramètre avec point
 
-        ~Plan();
+        // Methode
+        float intersection(Rayon Ray) override;
+        void afficher() const; //affichage
+        Materiel calculerCouleur(const Point3D& point, Light * light, float lumiere_ambiante) override;
+
+        
     private :
         Point3D A;
-        //Normal a mettre mais je sais pas comment la mettre
+        Vecteur3D normal;
 };
-*/
 
 #endif // PLAN_H

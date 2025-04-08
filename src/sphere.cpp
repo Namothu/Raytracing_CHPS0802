@@ -64,17 +64,23 @@ Materiel Sphere::calculerCouleur(const Point3D& point, Light* light, float lumie
     directionLumiere = directionLumiere * (1.0f / directionLumiere.produitScalaire(directionLumiere));  // Normalisation
     //directionLumiere.afficher();
 
-    //on calcule l'intensité lumineuse en fonction de l'angle entre la normale et la lumière
+    //On calcule l'intensité lumineuse en fonction de l'angle entre la normale et la lumière
     float intensite_angle = std::max(normale.produitScalaire(directionLumiere), 0.0f);  // Produit scalaire normalisé
 
+    //On notre intensite_physique
     float intensite_physique = light->getLightIntensityAtPoint(point);
 
-    // On calcule la couleur du point
-    int r = std::min(static_cast<int>((material.r * intensite_physique * intensite_angle)+(material.r*lumiere_ambiante)),250);
-    int g = std::min(static_cast<int>((material.g * intensite_physique * intensite_angle)+(material.g*lumiere_ambiante)),250);
-    int b = std::min(static_cast<int>((material.b * intensite_physique * intensite_angle)+(material.b*lumiere_ambiante)),250);
+    //on calcule notre intensité lumineuse
+    float intensite_mul = intensite_physique * intensite_angle;
 
-    //std::cout << intensite_physique << intensite_angle << intensite_physique * intensite_angle << "\n";
+    //On ajoute l'illumination ambiante à l'intensité lumineuse
+    float intensiteFinale = intensite_mul + lumiere_ambiante;
+    intensiteFinale = std::min(intensiteFinale, 1.0f);  // Limiter l'intensité à 1 (maximum)
+
+    // On calcule la couleur du point
+    int r = static_cast<int>(material.r * intensiteFinale);
+    int g = static_cast<int>(material.g * intensiteFinale);
+    int b = static_cast<int>(material.b * intensiteFinale);
 
     return Materiel(r, g, b);
 }
