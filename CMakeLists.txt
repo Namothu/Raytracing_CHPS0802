@@ -7,23 +7,16 @@ project(MyRaytracing)
 # Définir les options de compilation
 set(CMAKE_CXX_STANDARD 11)
 
-# Ajouter des fichiers sources de src avec un chemin relatif
-file(GLOB SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
+# Ajouter des fichier sources de src
+file(GLOB SOURCES "src/*.cpp")
 
-# Définir le dossier de sortie pour l'exécutable avec un chemin relatif
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+# Définir le dossier de sortie pour l'exécutable
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Ajouter des entêtes du dossier src avec un chemin relatif
-include_directories("${CMAKE_SOURCE_DIR}/src")
+# Ajouter des entêtes du fichier src
+include_directories(${PROJECT_SOURCE_DIR}/src)
 
-# Ajouter l'exécutable en spécifiant les sources principales et supplémentaires
-add_executable(MyRaytracing "${CMAKE_SOURCE_DIR}/src/main_test.cpp" ${SOURCES})
+# Ajouter l'exécutable avec sur le fichier main.cpp
+add_executable(MyRaytracing src/main_test.cpp ${SOURCES})
 
-# Configurer différentes options en fonction des scénarios
-# Exemple de scénario de compilation de débogage
-set(DEBUG_BUILD_FLAGS "-g")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DEBUG_BUILD_FLAGS}")
-
-# Exemple de scénario de compilation de production
-set(PROD_BUILD_FLAGS "-O3")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${PROD_BUILD_FLAGS}")
+#Faire en sorte qu'il ai 3 scenario
