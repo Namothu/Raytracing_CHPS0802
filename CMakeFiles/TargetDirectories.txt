@@ -1,0 +1,3 @@
+/mnt/c/Users/William/Desktop/Info/Cours_annee_2024-2025/CHPS0802/Raytracing_CHPS0802/CMakeFiles/MyRaytracing.dir
+/mnt/c/Users/William/Desktop/Info/Cours_annee_2024-2025/CHPS0802/Raytracing_CHPS0802/CMakeFiles/edit_cache.dir
+/mnt/c/Users/William/Desktop/Info/Cours_annee_2024-2025/CHPS0802/Raytracing_CHPS0802/CMakeFiles/rebuild_cache.dir

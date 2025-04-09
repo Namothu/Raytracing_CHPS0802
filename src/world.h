@@ -28,6 +28,7 @@ class World {
 
         //Methode
         void generate_img(const string& nomFichier);
+        void generate_img_gpu(const string& nomFichier);
     
 };
 
