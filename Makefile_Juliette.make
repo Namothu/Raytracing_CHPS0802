@@ -4,10 +4,11 @@ EXEC = main_test
 # Répertoires
 SRC_DIR = src
 OBJ_DIR = obj
+INCLUDE_DIR = include src # Ajouter le répertoire d'en-têtes
 
 # Compiler et flags
 CXX = g++
-CXXFLAGS = -Wall -std=c++17 -I$(SRC_DIR)  # Ajouter src comme répertoire d'en-têtes
+CXXFLAGS = -Wall -std=c++17 -I$(INCLUDE_DIR)  # Ajouter le répertoire include
 
 # Fichiers sources et objets
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
