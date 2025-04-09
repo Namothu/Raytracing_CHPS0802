@@ -7,7 +7,7 @@ OBJ_DIR = obj
 
 # Compiler et flags
 CXX = g++
-CXXFLAGS = -Wall -std=c++17
+CXXFLAGS = -Wall -std=c++17 -I$(SRC_DIR)  # Ajouter src comme répertoire d'en-têtes
 
 # Fichiers sources et objets
 SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)

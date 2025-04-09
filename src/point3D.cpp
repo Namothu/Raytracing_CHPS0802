@@ -1,4 +1,4 @@
-#include "point3D.h"
+#include "Point3D.h"
 
 // Constructeur par défaut
 Point3D::Point3D() : x(0), y(0), z(0) {}
