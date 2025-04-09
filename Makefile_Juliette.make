@@ -4,7 +4,7 @@ EXEC = main_test
 # Répertoires
 SRC_DIR = src
 OBJ_DIR = obj
-INCLUDE_DIR = include src # Ajouter le répertoire d'en-têtes
+INCLUDE_DIR = include ./src # Ajouter le répertoire d'en-têtes
 
 # Compiler et flags
 CXX = g++

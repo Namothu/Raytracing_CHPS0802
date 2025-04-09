@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/wimartinez/Raytracing_CHPS0802
+CMAKE_SOURCE_DIR = /mnt/c/Users/William/Desktop/Info/Cours_annee_2024-2025/CHPS0802/Raytracing_CHPS0802
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/wimartinez/Raytracing_CHPS0802
+CMAKE_BINARY_DIR = /mnt/c/Users/William/Desktop/Info/Cours_annee_2024-2025/CHPS0802/Raytracing_CHPS0802
 
 #=============================================================================
 # Targets provided globally by CMake.
