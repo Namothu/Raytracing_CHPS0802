@@ -111,7 +111,7 @@ void launch_calculate_intersections(
         spheres_host[i].radius = spheres_cpu[i]->R;
     }
 
-    printf("Coucou interieur fonction 1\n");
+    
 
     std::vector<PlanData> plans_host(num_plans);
     for (int i = 0; i < num_plans; ++i) {
@@ -120,8 +120,6 @@ void launch_calculate_intersections(
         plans_host[i].A = CudaPoint3D(A.getX(), A.getY(), A.getZ());
         plans_host[i].normal = CudaVecteur3D(N.getX(), N.getY(), N.getZ());
     }
-
-    printf("Coucou interieur fonction 2\n");
 
     // 🔹 Pointeurs device
     CudaRayon* rays_dev;
@@ -136,12 +134,16 @@ void launch_calculate_intersections(
     size_t result_size = num_rays * sizeof(float);
     size_t id_size = num_rays * sizeof(int);
 
+    printf("Coucou interieur fonction 1\n");
+
     // 🔸 Allocation sur le GPU
     cudaMalloc(&rays_dev, ray_size);
     cudaMalloc(&spheres_dev, sphere_size);
     cudaMalloc(&plans_dev, plan_size);
     cudaMalloc(&t_results_dev, result_size);
     cudaMalloc(&object_ids_dev, id_size);
+
+    printf("Coucou interieur fonction 2\n");
 
     // 🔸 Transfert CPU → GPU
     cudaMemcpy(rays_dev, rays_host.data(), ray_size, cudaMemcpyHostToDevice);
