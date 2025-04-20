@@ -91,8 +91,6 @@ void launch_calculate_intersections(
     num_spheres = spheres_cpu.size();
     num_plans = plans_cpu.size();
 
-    printf("Coucou interieur fonction 1\n");
-
     // 🔸 Allouer et remplir les versions CUDA
     std::vector<CudaRayon> rays_host(num_rays);
     for (int i = 0; i < num_rays; ++i) {
@@ -106,14 +104,14 @@ void launch_calculate_intersections(
             rays_cpu[i].direction.getZ());
     }
 
-    printf("Coucou interieur fonction 2\n");
-
     std::vector<SphereData> spheres_host(num_spheres);
     for (int i = 0; i < num_spheres; ++i) {
         Point3D c = spheres_cpu[i]->C;
         spheres_host[i].center = CudaPoint3D(c.getX(), c.getY(), c.getZ());
         spheres_host[i].radius = spheres_cpu[i]->R;
     }
+
+    printf("Coucou interieur fonction 1\n");
 
     std::vector<PlanData> plans_host(num_plans);
     for (int i = 0; i < num_plans; ++i) {
@@ -122,6 +120,8 @@ void launch_calculate_intersections(
         plans_host[i].A = CudaPoint3D(A.getX(), A.getY(), A.getZ());
         plans_host[i].normal = CudaVecteur3D(N.getX(), N.getY(), N.getZ());
     }
+
+    printf("Coucou interieur fonction 2\n");
 
     // 🔹 Pointeurs device
     CudaRayon* rays_dev;
