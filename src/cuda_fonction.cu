@@ -133,4 +133,4 @@ __host__ void Vue::calculate_matrice_pixel_gpu(vector<Object*> listes_des_object
     cudaFree(d_light);
     cudaFree(d_matrice_rayon);
     cudaFree(d_matrice_pixel);
-}
+}*/
