@@ -1,6 +1,6 @@
 #include "Vue.h"
 
-#include "cuda_fonction.h"
+#include "cuda_fonction.cpp"
 
 Vue::Vue() {
     resolution[0] = 1024;
