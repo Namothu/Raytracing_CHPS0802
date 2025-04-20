@@ -27,7 +27,7 @@ public:
     Vecteur3D operator+(const Vecteur3D& V2) const;  // Surcharge de l'addition
     Vecteur3D operator*(const Vecteur3D& V2) const;  // Surcharge de la multiplication par un autre vecteur
     Vecteur3D operator*(float f) const; //Surcharge de la multiplication par un float
-    float produitScalaire(const Vecteur3D& V2);
+    float produitScalaire(const Vecteur3D& V2) const;
 
     // Méthode
     static Vecteur3D calcul_normale_3point(const Point3D& point1, const Point3D& point2, const Point3D& point3);

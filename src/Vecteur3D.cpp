@@ -58,7 +58,7 @@ Vecteur3D Vecteur3D::operator*(float f) const {
     return Vecteur3D(valeurs[0] * f, valeurs[1] * f, valeurs[2] * f);
 }
 
-float Vecteur3D::produitScalaire(const Vecteur3D& V2) {
+float Vecteur3D::produitScalaire(const Vecteur3D& V2) const {
     return valeurs[0] * V2.valeurs[0] + valeurs[1] * V2.valeurs[1] + valeurs[2] * V2.valeurs[2];
 }
 
