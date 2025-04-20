@@ -1,97 +1,144 @@
 #include "cuda_fonction.cuh"
 
+struct SphereData {
+    Point3D center;
+    float radius;
+};
+
+struct PlanData {
+    Point3D A;
+    Vecteur3D normal;
+};
+
+// Fonction device d'intersection pour les sphères
+__device__ float intersection_sphere(const Rayon& ray, const SphereData& sphere) {
+    Vecteur3D oc = Vecteur3D(sphere.center, ray.origine);
+    float a = ray.direction.produitScalaire(ray.direction);
+    float b = 2.0f * oc.produitScalaire(ray.direction);
+    float c = oc.produitScalaire(oc) - (sphere.radius * sphere.radius);
+    float discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0.0f) return -1.0f;
+
+    float t1 = (-b + sqrtf(discriminant)) / (2.0f * a);
+    float t2 = (-b - sqrtf(discriminant)) / (2.0f * a);
+
+    if (t1 >= 0.0f) {
+        return (t2 >= 0.0f && t2 < t1) ? t2 : t1;
+    }
+
+    return -1.0f;
+}
+
+// Fonction device d'intersection pour les plans
+__device__ float intersection_plan(const Rayon& ray, const PlanData& plan) {
+    Vecteur3D AO = Vecteur3D(ray.origine, plan.A);
+    float denom = ray.direction.produitScalaire(plan.normal);
+    if (fabs(denom) < 1e-6f) return -1.0f;
+    return AO.produitScalaire(plan.normal) / denom;
+}
+
 __global__ void calculate_intersections_kernel(
     Rayon* rayons,
-    Object** objets_sphere,
+    SphereData* spheres,
     int num_spheres,
-    Object** objets_plan,
+    PlanData* plans,
     int num_plans,
     float* result_t,
-    int* result_num_object,
+    int* result_object_id,
     int num_rayons
 ) {
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= num_rayons) return;
 
-    if (idx < num_rayons) {
-        float t_min = 1e30f;
-        int object_plus_proche = -1;
+    Rayon ray = rayons[idx];
+    float t_min = 1e30f;
+    int obj_id = -1;
 
-        for (int i = 0; i < num_spheres; i++) {
-            float t = objets_sphere[i]->intersection(rayons[idx]);
-            if (t >= 0.0f && t < t_min) {
-                t_min = t;
-                object_plus_proche = i;
-            }
+    for (int i = 0; i < num_spheres; i++) {
+        float t = intersect_sphere(ray, spheres[i]);
+        if (t >= 0.0f && t < t_min) {
+            t_min = t;
+            obj_id = i; // sphères en premier
         }
-
-        for (int i = 0; i < num_plans; i++) {
-            float t = objets_plan[i]->intersection(rayons[idx]);
-            if (t >= 0.0f && t < t_min) {
-                t_min = t;
-                object_plus_proche = num_spheres + i;
-            }
-        }
-
-        result_t[idx] = t_min;
-        result_num_object[idx] = object_plus_proche;
     }
+
+    for (int i = 0; i < num_plans; i++) {
+        float t = intersect_plan(ray, plans[i]);
+        if (t >= 0.0f && t < t_min) {
+            t_min = t;
+            obj_id = num_spheres + i;
+        }
+    }
+
+    result_t[idx] = t_min;
+    result_object_id[idx] = obj_id;
 }
 
 void launch_calculate_intersections(
     Rayon* h_rayons,
     int num_rayons,
-    Object** h_spheres,
+    Sphere** h_spheres,
     int num_spheres,
-    Object** h_plans,
+    Plan** h_plans,
     int num_plans,
     float* h_result_t,
-    int* h_result_num_object
+    int* h_result_object_id
 ) {
-    // Allocation GPU
+    // === 1. Convertir vers SphereData et PlanData ===
+    std::vector<SphereData> spheres_data(num_spheres);
+    for (int i = 0; i < num_spheres; ++i) {
+        spheres_data[i].center = h_spheres[i]->C;
+        spheres_data[i].radius = h_spheres[i]->R;
+    }
+
+    std::vector<PlanData> plans_data(num_plans);
+    for (int i = 0; i < num_plans; ++i) {
+        plans_data[i].A = h_plans[i]->A;
+        plans_data[i].normal = h_plans[i]->normal;
+    }
+
+    // === 2. Allocation device ===
     Rayon* d_rayons;
-    Object** d_spheres;
-    Object** d_plans;
+    SphereData* d_spheres;
+    PlanData* d_plans;
     float* d_result_t;
-    int* d_result_num_object;
+    int* d_result_object_id;
 
     cudaMalloc(&d_rayons, num_rayons * sizeof(Rayon));
-    cudaMalloc(&d_spheres, num_spheres * sizeof(Object*));
-    cudaMalloc(&d_plans, num_plans * sizeof(Object*));
+    cudaMalloc(&d_spheres, num_spheres * sizeof(SphereData));
+    cudaMalloc(&d_plans, num_plans * sizeof(PlanData));
     cudaMalloc(&d_result_t, num_rayons * sizeof(float));
-    cudaMalloc(&d_result_num_object, num_rayons * sizeof(int));
+    cudaMalloc(&d_result_object_id, num_rayons * sizeof(int));
 
-    // Copie vers le device
+    // === 3. Copier les données vers le GPU ===
     cudaMemcpy(d_rayons, h_rayons, num_rayons * sizeof(Rayon), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_spheres, h_spheres, num_spheres * sizeof(Object*), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_plans, h_plans, num_plans * sizeof(Object*), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_spheres, spheres_data.data(), num_spheres * sizeof(SphereData), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_plans, plans_data.data(), num_plans * sizeof(PlanData), cudaMemcpyHostToDevice);
 
-    // Lancement du kernel
-    int blockSize = 256;
-    int numBlocks = (num_rayons + blockSize - 1) / blockSize;
+    // === 4. Lancer le kernel ===
+    int threadsPerBlock = 256;
+    int blocks = (num_rayons + threadsPerBlock - 1) / threadsPerBlock;
 
-    calculate_intersections_kernel<<<numBlocks, blockSize>>>(
-        d_rayons,
-        d_spheres,
-        num_spheres,
-        d_plans,
-        num_plans,
-        d_result_t,
-        d_result_num_object,
+    calculate_intersections_kernel<<<blocks, threadsPerBlock>>>(
+        d_rayons, d_spheres, num_spheres,
+        d_plans, num_plans,
+        d_result_t, d_result_object_id,
         num_rayons
     );
 
-    cudaDeviceSynchronize(); // Important pour attendre la fin du kernel
+    cudaDeviceSynchronize(); // Attendre la fin du kernel
 
-    // Copie des résultats sur l’hôte
+    // === 5. Copier les résultats vers le host ===
     cudaMemcpy(h_result_t, d_result_t, num_rayons * sizeof(float), cudaMemcpyDeviceToHost);
-    cudaMemcpy(h_result_num_object, d_result_num_object, num_rayons * sizeof(int), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_result_object_id, d_result_object_id, num_rayons * sizeof(int), cudaMemcpyDeviceToHost);
 
-    // Libération mémoire GPU
+    // === 6. Libération de la mémoire ===
     cudaFree(d_rayons);
     cudaFree(d_spheres);
     cudaFree(d_plans);
     cudaFree(d_result_t);
-    cudaFree(d_result_num_object);
+    cudaFree(d_result_object_id);
 }
 
 
