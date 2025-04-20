@@ -19,7 +19,7 @@ class Sphere : public Object {
         void afficher() const; //affichage
         Materiel calculerCouleur(const Point3D& point, Light * light, float lumiere_ambiante) override;
 
-    private :
+        //Attribute
         Point3D C; //Point d'origne
         float R; //Rayon de la sphère
 };

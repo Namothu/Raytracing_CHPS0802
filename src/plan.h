@@ -24,8 +24,7 @@ class Plan : public Object {
         void afficher() const; //affichage
         Materiel calculerCouleur(const Point3D& point, Light * light, float lumiere_ambiante) override;
 
-        
-    private :
+        //Attribute
         Point3D A;
         Vecteur3D normal;
 };
