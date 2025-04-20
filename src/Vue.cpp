@@ -181,49 +181,30 @@ void Vue::enregistrer_matrice_pixel(const string& nomFichier) {
 }
 
 void Vue::calculate_matrice_pixel_gpu(std::vector<Object*> listes_des_objects, Light* light, float lumiere_ambiante) {
-    // 1. Séparer sphères et plans
-    std::vector<Object*> spheres;
-    std::vector<Object*> plans;
-
-    for (Object* obj : listes_des_objects) {
-        if (dynamic_cast<Sphere*>(obj)) {
-            spheres.push_back(obj);
-        } else if (dynamic_cast<Plan*>(obj)) {
-            plans.push_back(obj);
-        }
-    }
-
-    // 2. Préparer la liste aplatie de rayons
     int height = matrice_rayon.size();
     int width = matrice_rayon[0].size();
     int num_rayons = height * width;
 
-    Rayon* flat_rayons = new Rayon[num_rayons];
-    int idx = 0;
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            flat_rayons[idx++] = matrice_rayon[i][j];
+    // 1. Aplatir la matrice de rayons
+    std::vector<Rayon> flat_rayons;
+    flat_rayons.reserve(num_rayons);
+    for (const auto& ligne : matrice_rayon) {
+        for (const auto& r : ligne) {
+            flat_rayons.push_back(r);
         }
     }
 
-    // 3. Résultats des calculs GPU
+    // 2. Allouer la mémoire pour les résultats
     float* result_t = new float[num_rayons];
     int* result_num_object = new int[num_rayons];
 
-    // Appel à la fonction CUDA
-    launch_calculate_intersections(
-        flat_rayons,
-        num_rayons,
-        spheres.data(), spheres.size(),
-        plans.data(), plans.size(),
-        result_t,
-        result_num_object
-    );
+    // 3. Appeler le launcher CUDA
+    launch_calculate_intersections(flat_rayons, listes_des_objects, result_t, result_num_object);
 
-    // 4. Traitement des résultats et construction de la matrice_pixel
-    idx = 0;
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
+    // 4. Interpréter les résultats
+    int idx = 0;
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
             int obj_index = result_num_object[idx];
             float t_min = result_t[idx];
 
@@ -239,12 +220,11 @@ void Vue::calculate_matrice_pixel_gpu(std::vector<Object*> listes_des_objects, L
                 matrice_pixel[i][j][2] = 0;
             }
 
-            idx++;
+            ++idx;
         }
     }
 
-    // Nettoyage mémoire
-    delete[] flat_rayons;
+    // 5. Libération mémoire
     delete[] result_t;
     delete[] result_num_object;
 }
