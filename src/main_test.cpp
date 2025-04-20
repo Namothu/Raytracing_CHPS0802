@@ -7,6 +7,7 @@ int main() {
     // Afficher un message à l'écran
     std::cout << "Bonjour, tout le monde !" << std::endl;
 
+    //Configuration de la scène
     World mybeautifulworld = World();
     mybeautifulworld.camera = Vue(2048,Point3D(10,10,-5),Point3D(-10,10,-5),Point3D(-10,-10,-5));
     Sphere s1 = Sphere(Point3D(-10,-7,10), 2);
@@ -24,16 +25,15 @@ int main() {
 
     mybeautifulworld.vecteur_all_object.push_back(&p1);
 
-    //std::cout << s1.intersection(Rayon(Point3D(-10,0.5,0.5),Vecteur3D(1,0,0))) << std::endl;
-
+    //Partie Squentiel
     std::cout << "Debut Calcul Version normal" << std::endl;
     mybeautifulworld.generate_img("test_img.ppm");
     std::cout << "Top Fin" << std::endl;
 
+    //Partie GPU
     std::cout << "Debut Calcul Version GPU" << std::endl;
     mybeautifulworld.generate_img_gpu("test_img_gpu.ppm");
     std::cout << "Top Fin" << std::endl;
     
-    // Retourner 0 pour indiquer que le programme s'est exécuté correctement
     return 0;
 }

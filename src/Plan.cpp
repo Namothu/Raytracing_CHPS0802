@@ -9,6 +9,10 @@ float Plan::intersection(Rayon Ray) {
     //Calcul de la valeur de (A - O)
     Vecteur3D distance_A_O = Vecteur3D(Ray.origine,this->A);
 
+    if (fabs((Ray.direction.produitScalaire(this->normal)) < 0.00001)) {
+        return -1.0f; // Presque entièrement parallèle au plan
+    }
+
     //Un fois qu'on a tout nos element nous allons reproduire avec nos methode la formule :
     //t = (A-O)*n / d*n
     float t = (distance_A_O.produitScalaire(this->normal)) / (Ray.direction.produitScalaire(this->normal));
