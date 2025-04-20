@@ -8,6 +8,8 @@
 #include <cuda.h>
 #include <curand.h>
 
+#include "cuda_struct.cuh"
+
 __global__ void calculate_intersections_kernel(
     CudaRayon* rays, int num_rays,
     SphereData* spheres, int num_spheres,
