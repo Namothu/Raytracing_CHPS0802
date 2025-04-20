@@ -134,8 +134,6 @@ void launch_calculate_intersections(
     size_t result_size = num_rays * sizeof(float);
     size_t id_size = num_rays * sizeof(int);
 
-    printf("Coucou interieur fonction 1\n");
-
     // 🔸 Allocation sur le GPU
     cudaMalloc(&rays_dev, ray_size);
     cudaMalloc(&spheres_dev, sphere_size);
@@ -143,12 +141,12 @@ void launch_calculate_intersections(
     cudaMalloc(&t_results_dev, result_size);
     cudaMalloc(&object_ids_dev, id_size);
 
-    printf("Coucou interieur fonction 2\n");
-
     // 🔸 Transfert CPU → GPU
     cudaMemcpy(rays_dev, rays_host.data(), ray_size, cudaMemcpyHostToDevice);
     cudaMemcpy(spheres_dev, spheres_host.data(), sphere_size, cudaMemcpyHostToDevice);
     cudaMemcpy(plans_dev, plans_host.data(), plan_size, cudaMemcpyHostToDevice);
+
+    printf("Coucou interieur fonction chaussure\n");
 
     // 🔹 Lancer le kernel
     int threads = 256;
