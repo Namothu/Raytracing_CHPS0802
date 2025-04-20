@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.18)
 
 # Nom du projet
-project(MyRaytracing)
+project(MyRaytracing LANGUAGES CXX CUDA)
 
 # Ajouter la prise en charge de CUDA
 find_package(CUDAToolkit REQUIRED)
