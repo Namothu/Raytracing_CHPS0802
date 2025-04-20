@@ -1,5 +1,6 @@
 #include "Vue.h"
-#include <fstream>
+
+#include "cuda_fonction.h"
 
 Vue::Vue() {
     resolution[0] = 1024;
@@ -177,4 +178,88 @@ void Vue::enregistrer_matrice_pixel(const string& nomFichier) {
     // Fermer le fichier
     fichier.close();
     cout << "Image enregistrée dans " << nomFichier << endl;
+}
+
+void Vue::calculate_matrice_pixel_gpu(vector<Object*> listes_des_objects, Light * light, float lumiere_ambiante) {
+    // Séparation des sphères et des plans
+    vector<Object*> spheres;
+    vector<Object*> plans;
+
+    for (Object* obj : listes_des_objects) {
+        if (dynamic_cast<Sphere*>(obj)) {
+            spheres.push_back(obj);
+        } else if (dynamic_cast<Plan*>(obj)) {
+            plans.push_back(obj);
+        }
+    }
+
+    // Nombre de rayons à traiter
+    int num_rayons = matrice_rayon.size() * matrice_rayon[0].size();
+
+    // Allocation de mémoire sur le GPU
+    Rayon* d_rayons;
+    Object** d_objets_sphere;
+    Object** d_objets_plan;
+    float* d_result_t;
+    int* d_result_num_object;
+
+    cudaMalloc(&d_rayons, num_rayons * sizeof(Rayon));
+    cudaMalloc(&d_objets_sphere, spheres.size() * sizeof(Object*));
+    cudaMalloc(&d_objets_plan, plans.size() * sizeof(Object*));
+    cudaMalloc(&d_result_t, num_rayons * sizeof(float));
+    cudaMalloc(&d_result_num_object, num_rayons * sizeof(int));
+
+    // Copie des données sur le GPU
+    cudaMemcpy(d_rayons, matrice_rayon.data(), num_rayons * sizeof(Rayon), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_objets_sphere, spheres.data(), spheres.size() * sizeof(Object*), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_objets_plan, plans.data(), plans.size() * sizeof(Object*), cudaMemcpyHostToDevice);
+
+    // Lancer le kernel CUDA
+    int blockSize = 256;
+    int numBlocks = (num_rayons + blockSize - 1) / blockSize;
+
+    calculate_intersections_kernel<<<numBlocks, blockSize>>>(
+        d_rayons, 
+        d_objets_sphere, 
+        spheres.size(), 
+        d_objets_plan, 
+        plans.size(), 
+        d_result_t, 
+        d_result_num_object, 
+        num_rayons
+    );
+
+    // Récupérer les résultats
+    float* result_t = new float[num_rayons];
+    int* result_num_object = new int[num_rayons];
+    cudaMemcpy(result_t, d_result_t, num_rayons * sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(result_num_object, d_result_num_object, num_rayons * sizeof(int), cudaMemcpyDeviceToHost);
+
+    // Utiliser les résultats pour calculer la couleur de chaque rayon
+    int idx = 0;
+    for (int i = 0; i < matrice_rayon.size(); i++) {
+        for (int j = 0; j < matrice_rayon[i].size(); j++) {
+            if (result_num_object[idx] >= 0) {
+                float t_min = result_t[idx];
+                int object_plus_proche = result_num_object[idx];
+                Point3D P = matrice_rayon[i][j].point_at_t(t_min);
+                Materiel M = listes_des_objects[object_plus_proche]->calculerCouleur(P, light, lumiere_ambiante);
+                matrice_pixel[i][j][0] = M.r;
+                matrice_pixel[i][j][1] = M.g;
+                matrice_pixel[i][j][2] = M.b;
+            } else {
+                matrice_pixel[i][j][0] = 0;
+                matrice_pixel[i][j][1] = 0;
+                matrice_pixel[i][j][2] = 0;
+            }
+            idx++;
+        }
+    }
+
+    // Libération de la mémoire GPU
+    cudaFree(d_rayons);
+    cudaFree(d_objets_sphere);
+    cudaFree(d_objets_plan);
+    cudaFree(d_result_t);
+    cudaFree(d_result_num_object);
 }

@@ -7,3 +7,8 @@ void World::generate_img(const string& nomFichier) {
     camera.calculate_matrice_pixel(this->vecteur_all_object,&this->lumiere_divine,lumiere_ambiante);
     camera.enregistrer_matrice_pixel(nomFichier);
 }
+
+void World::generate_img_gpu(const string& nomFichier) {
+    camera.calculate_matrice_pixel_gpu(this->vecteur_all_object,&this->lumiere_divine,lumiere_ambiante);
+    camera.enregistrer_matrice_pixel(nomFichier);
+}

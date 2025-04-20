@@ -252,6 +252,8 @@ bin/MyRaytracing: CMakeFiles/MyRaytracing.dir/src/Vecteur3D.cpp.o
 bin/MyRaytracing: CMakeFiles/MyRaytracing.dir/src/Vue.cpp.o
 bin/MyRaytracing: CMakeFiles/MyRaytracing.dir/src/World.cpp.o
 bin/MyRaytracing: CMakeFiles/MyRaytracing.dir/build.make
+bin/MyRaytracing: /usr/lib/x86_64-linux-gnu/libcudart_static.a
+bin/MyRaytracing: /usr/lib/x86_64-linux-gnu/librt.a
 bin/MyRaytracing: CMakeFiles/MyRaytracing.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/c/Users/William/Desktop/Info/Cours_annee_2024-2025/CHPS0802/Raytracing_CHPS0802/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable bin/MyRaytracing"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MyRaytracing.dir/link.txt --verbose=$(VERBOSE)

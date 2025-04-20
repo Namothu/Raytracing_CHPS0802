@@ -3,10 +3,13 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
 using namespace std;
 
 #include "Rayon.h"
 #include "Object.h"
+
+#define BLOCK_SIZE 16
 
 /**
  * La classe Vue représente notre vision de la caméra
@@ -23,6 +26,10 @@ class Vue {
         void calculate_matrice_pixel(vector<Object*> listes_des_objects, Light * light,float lumiere_ambiante); //permet de calculer la couleur que chaque rayon retourne
         void calculate_matrice_pixel_gpu(vector<Object*> listes_des_objects, Light * light,float lumiere_ambiante); //permet de calculer la couleur que chaque rayon retourne mais en gpu
         void enregistrer_matrice_pixel(const string& nomFichier); //enregistre la matrice de pixel en image ppm
+        
+        //GPU
+        /*void calculate_matrice_pixel_kernel( Object** d_listes_des_objects, Light* d_light, float lumiere_ambiante,
+            Rayon* d_matrice_rayon, float* d_matrice_pixel, int width, int height, float distance_max_vision);*/
 
     private :
         vector<vector<Rayon>> matrice_rayon; //Matrice qui va contenir tout les capteur de notre vue

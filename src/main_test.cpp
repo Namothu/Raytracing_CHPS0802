@@ -26,7 +26,13 @@ int main() {
 
     //std::cout << s1.intersection(Rayon(Point3D(-10,0.5,0.5),Vecteur3D(1,0,0))) << std::endl;
 
+    std::cout << "Debut Calcul Version normal" << std::endl;
     mybeautifulworld.generate_img("test_img.ppm");
+    std::cout << "Top Fin" << std::endl;
+
+    std::cout << "Debut Calcul Version GPU" << std::endl;
+    mybeautifulworld.generate_img_gpu("test_img_gpu.ppm");
+    std::cout << "Top Fin" << std::endl;
     
     // Retourner 0 pour indiquer que le programme s'est exécuté correctement
     return 0;
