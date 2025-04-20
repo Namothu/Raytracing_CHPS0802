@@ -148,6 +148,8 @@ void launch_calculate_intersections(
     int threads = 256;
     int blocks = (num_rays + threads - 1) / threads;
 
+    std::cout << "On lance le kernel cuda";
+
     calculate_intersections_kernel<<<blocks, threads>>>(
         rays_dev, num_rays,
         spheres_dev, num_spheres,
