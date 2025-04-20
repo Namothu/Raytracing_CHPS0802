@@ -180,10 +180,10 @@ void Vue::enregistrer_matrice_pixel(const string& nomFichier) {
     cout << "Image enregistrée dans " << nomFichier << endl;
 }
 
-void Vue::calculate_matrice_pixel_gpu(vector<Object*> listes_des_objects, Light * light, float lumiere_ambiante) {
-    // Séparation des sphères et des plans
-    vector<Object*> spheres;
-    vector<Object*> plans;
+void Vue::calculate_matrice_pixel_gpu(std::vector<Object*> listes_des_objects, Light* light, float lumiere_ambiante) {
+    // 1. Séparer sphères et plans
+    std::vector<Object*> spheres;
+    std::vector<Object*> plans;
 
     for (Object* obj : listes_des_objects) {
         if (dynamic_cast<Sphere*>(obj)) {
@@ -193,57 +193,43 @@ void Vue::calculate_matrice_pixel_gpu(vector<Object*> listes_des_objects, Light 
         }
     }
 
-    // Nombre de rayons à traiter
-    int num_rayons = matrice_rayon.size() * matrice_rayon[0].size();
+    // 2. Préparer la liste aplatie de rayons
+    int height = matrice_rayon.size();
+    int width = matrice_rayon[0].size();
+    int num_rayons = height * width;
 
-    // Allocation de mémoire sur le GPU
-    Rayon* d_rayons;
-    Object** d_objets_sphere;
-    Object** d_objets_plan;
-    float* d_result_t;
-    int* d_result_num_object;
+    Rayon* flat_rayons = new Rayon[num_rayons];
+    int idx = 0;
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            flat_rayons[idx++] = matrice_rayon[i][j];
+        }
+    }
 
-    cudaMalloc(&d_rayons, num_rayons * sizeof(Rayon));
-    cudaMalloc(&d_objets_sphere, spheres.size() * sizeof(Object*));
-    cudaMalloc(&d_objets_plan, plans.size() * sizeof(Object*));
-    cudaMalloc(&d_result_t, num_rayons * sizeof(float));
-    cudaMalloc(&d_result_num_object, num_rayons * sizeof(int));
-
-    // Copie des données sur le GPU
-    cudaMemcpy(d_rayons, matrice_rayon.data(), num_rayons * sizeof(Rayon), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_objets_sphere, spheres.data(), spheres.size() * sizeof(Object*), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_objets_plan, plans.data(), plans.size() * sizeof(Object*), cudaMemcpyHostToDevice);
-
-    // Lancer le kernel CUDA
-    int blockSize = 256;
-    int numBlocks = (num_rayons + blockSize - 1) / blockSize;
-
-    calculate_intersections_kernel<<<numBlocks, blockSize>>>(
-        d_rayons, 
-        d_objets_sphere, 
-        spheres.size(), 
-        d_objets_plan, 
-        plans.size(), 
-        d_result_t, 
-        d_result_num_object, 
-        num_rayons
-    );
-
-    // Récupérer les résultats
+    // 3. Résultats des calculs GPU
     float* result_t = new float[num_rayons];
     int* result_num_object = new int[num_rayons];
-    cudaMemcpy(result_t, d_result_t, num_rayons * sizeof(float), cudaMemcpyDeviceToHost);
-    cudaMemcpy(result_num_object, d_result_num_object, num_rayons * sizeof(int), cudaMemcpyDeviceToHost);
 
-    // Utiliser les résultats pour calculer la couleur de chaque rayon
-    int idx = 0;
-    for (int i = 0; i < matrice_rayon.size(); i++) {
-        for (int j = 0; j < matrice_rayon[i].size(); j++) {
-            if (result_num_object[idx] >= 0) {
-                float t_min = result_t[idx];
-                int object_plus_proche = result_num_object[idx];
+    // Appel à la fonction CUDA
+    launch_calculate_intersections(
+        flat_rayons,
+        num_rayons,
+        spheres.data(), spheres.size(),
+        plans.data(), plans.size(),
+        result_t,
+        result_num_object
+    );
+
+    // 4. Traitement des résultats et construction de la matrice_pixel
+    idx = 0;
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            int obj_index = result_num_object[idx];
+            float t_min = result_t[idx];
+
+            if (obj_index >= 0) {
                 Point3D P = matrice_rayon[i][j].point_at_t(t_min);
-                Materiel M = listes_des_objects[object_plus_proche]->calculerCouleur(P, light, lumiere_ambiante);
+                Materiel M = listes_des_objects[obj_index]->calculerCouleur(P, light, lumiere_ambiante);
                 matrice_pixel[i][j][0] = M.r;
                 matrice_pixel[i][j][1] = M.g;
                 matrice_pixel[i][j][2] = M.b;
@@ -252,14 +238,13 @@ void Vue::calculate_matrice_pixel_gpu(vector<Object*> listes_des_objects, Light 
                 matrice_pixel[i][j][1] = 0;
                 matrice_pixel[i][j][2] = 0;
             }
+
             idx++;
         }
     }
 
-    // Libération de la mémoire GPU
-    cudaFree(d_rayons);
-    cudaFree(d_objets_sphere);
-    cudaFree(d_objets_plan);
-    cudaFree(d_result_t);
-    cudaFree(d_result_num_object);
+    // Nettoyage mémoire
+    delete[] flat_rayons;
+    delete[] result_t;
+    delete[] result_num_object;
 }

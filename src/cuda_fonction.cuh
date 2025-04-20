@@ -19,5 +19,16 @@ __global__ void calculate_intersections_kernel(
     int num_rayons
 );
 
+void launch_calculate_intersections(
+    Rayon* h_rayons,
+    int num_rayons,
+    Object** h_spheres,
+    int num_spheres,
+    Object** h_plans,
+    int num_plans,
+    float* h_result_t,
+    int* h_result_num_object
+);
+
 
 #endif // CUDA_FONCTION_H
