@@ -80,6 +80,8 @@ void launch_calculate_intersections(
     std::vector<Sphere*> spheres_cpu;
     std::vector<Plan*> plans_cpu;
 
+    printf("Coucou");
+
     for (auto obj : objects) {
         if (auto* s = dynamic_cast<Sphere*>(obj)) {
             spheres_cpu.push_back(s);
@@ -148,7 +150,7 @@ void launch_calculate_intersections(
     int threads = 256;
     int blocks = (num_rays + threads - 1) / threads;
 
-    std::cout << "On lance le kernel cuda";
+    printf("On lance le calculate");
 
     calculate_intersections_kernel<<<blocks, threads>>>(
         rays_dev, num_rays,
