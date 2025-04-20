@@ -80,7 +80,7 @@ void launch_calculate_intersections(
     std::vector<Sphere*> spheres_cpu;
     std::vector<Plan*> plans_cpu;
 
-    printf("Coucou");
+    printf("Coucou interieur fonction \n");
 
     for (auto obj : objects) {
         if (auto* s = dynamic_cast<Sphere*>(obj)) {

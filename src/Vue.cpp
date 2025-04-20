@@ -185,6 +185,8 @@ void Vue::calculate_matrice_pixel_gpu(std::vector<Object*> listes_des_objects, L
     int width = matrice_rayon[0].size();
     int num_rayons = height * width;
 
+    printf("Calculate_matrice_pixel \n");
+
     // 1. Aplatir la matrice de rayons
     std::vector<Rayon> flat_rayons;
     flat_rayons.reserve(num_rayons);
