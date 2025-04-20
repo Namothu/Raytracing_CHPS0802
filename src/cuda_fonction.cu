@@ -1,9 +1,4 @@
-#include "Object.h"
-#include "Sphere.h"
-#include "Plan.h"
-#include "Vue.h"
-#include <cuda.h>
-#include <curand.h>
+#include "cuda_fonction.cuh"
 
 
 __global__ void calculate_intersections_kernel(
