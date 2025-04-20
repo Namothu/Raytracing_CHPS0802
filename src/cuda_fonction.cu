@@ -80,8 +80,6 @@ void launch_calculate_intersections(
     std::vector<Sphere*> spheres_cpu;
     std::vector<Plan*> plans_cpu;
 
-    printf("Coucou interieur fonction \n");
-
     for (auto obj : objects) {
         if (auto* s = dynamic_cast<Sphere*>(obj)) {
             spheres_cpu.push_back(s);
@@ -89,6 +87,8 @@ void launch_calculate_intersections(
             plans_cpu.push_back(p);
         }
     }
+
+    printf("Coucou interieur fonction \n");
 
     num_spheres = spheres_cpu.size();
     num_plans = plans_cpu.size();
