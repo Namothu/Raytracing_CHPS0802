@@ -106,15 +106,15 @@ void launch_calculate_intersections(
 
     std::vector<SphereData> spheres_host(num_spheres);
     for (int i = 0; i < num_spheres; ++i) {
-        Point3D c = spheres_cpu[i]->getCentre();
+        Point3D c = spheres_cpu[i]->C;
         spheres_host[i].center = CudaPoint3D(c.getX(), c.getY(), c.getZ());
-        spheres_host[i].radius = spheres_cpu[i]->getRayon();
+        spheres_host[i].radius = spheres_cpu[i]->R;
     }
 
     std::vector<PlanData> plans_host(num_plans);
     for (int i = 0; i < num_plans; ++i) {
-        Point3D A = plans_cpu[i]->getA();
-        Vecteur3D N = plans_cpu[i]->getNormal();
+        Point3D A = plans_cpu[i]->A;
+        Vecteur3D N = plans_cpu[i]->normal;
         plans_host[i].A = CudaPoint3D(A.getX(), A.getY(), A.getZ());
         plans_host[i].normal = CudaVecteur3D(N.getX(), N.getY(), N.getZ());
     }
