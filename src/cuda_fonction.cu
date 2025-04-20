@@ -56,7 +56,7 @@ __global__ void calculate_intersections_kernel(
     int obj_id = -1;
 
     for (int i = 0; i < num_spheres; i++) {
-        float t = intersect_sphere(ray, spheres[i]);
+        float t = intersection_sphere(ray, spheres[i]);
         if (t >= 0.0f && t < t_min) {
             t_min = t;
             obj_id = i; // sphères en premier
@@ -64,7 +64,7 @@ __global__ void calculate_intersections_kernel(
     }
 
     for (int i = 0; i < num_plans; i++) {
-        float t = intersect_plan(ray, plans[i]);
+        float t = intersection_plan(ray, plans[i]);
         if (t >= 0.0f && t < t_min) {
             t_min = t;
             obj_id = num_spheres + i;
