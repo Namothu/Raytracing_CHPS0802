@@ -1,6 +1,9 @@
 #ifndef CUDA_STRUCT
 #define CUDA_STRUCT
 
+#include <cuda.h>
+#include <curand.h>
+
 struct CudaPoint3D {
     float x, y, z;
 
