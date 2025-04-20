@@ -1,15 +1,5 @@
 #include "cuda_fonction.cuh"
 
-struct SphereData {
-    CudaPoint3D center;
-    float radius;
-};
-
-struct PlanData {
-    CudaPoint3D A;
-    CudaVecteur3D normal;
-};
-
 // Fonction device d'intersection pour les sphères
 __device__ float intersect_sphere(const CudaRayon& ray, const SphereData& sphere) {
     CudaVecteur3D oc(ray.origine, sphere.center);

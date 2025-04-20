@@ -63,4 +63,14 @@ struct CudaRayon {
     }
 };
 
+struct SphereData {
+    CudaPoint3D center;
+    float radius;
+};
+
+struct PlanData {
+    CudaPoint3D A;
+    CudaVecteur3D normal;
+};
+
 #endif //CUDA_STRUCT
