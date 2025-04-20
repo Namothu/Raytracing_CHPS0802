@@ -146,7 +146,6 @@ void launch_calculate_intersections(
     cudaMemcpy(spheres_dev, spheres_host.data(), sphere_size, cudaMemcpyHostToDevice);
     cudaMemcpy(plans_dev, plans_host.data(), plan_size, cudaMemcpyHostToDevice);
 
-    printf("Chassure\n");
 
     // 🔹 Lancer le kernel
     int threads = 256;
@@ -154,13 +153,14 @@ void launch_calculate_intersections(
 
     printf("On lance le calculate");
 
-    printf("MMMMMMmmmmm\n");
-
     calculate_intersections_kernel<<<blocks, threads>>>(
         rays_dev, num_rays,
         spheres_dev, num_spheres,
         plans_dev, num_plans,
         t_results_dev, object_ids_dev);
+
+    printf("?????");
+
 
     cudaDeviceSynchronize();
 
