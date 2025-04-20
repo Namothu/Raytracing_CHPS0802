@@ -88,10 +88,10 @@ void launch_calculate_intersections(
         }
     }
 
-    printf("Coucou interieur fonction \n");
-
     num_spheres = spheres_cpu.size();
     num_plans = plans_cpu.size();
+
+    printf("Coucou interieur fonction 1\n");
 
     // 🔸 Allouer et remplir les versions CUDA
     std::vector<CudaRayon> rays_host(num_rays);
@@ -105,6 +105,8 @@ void launch_calculate_intersections(
             rays_cpu[i].direction.getY(),
             rays_cpu[i].direction.getZ());
     }
+
+    printf("Coucou interieur fonction 2\n");
 
     std::vector<SphereData> spheres_host(num_spheres);
     for (int i = 0; i < num_spheres; ++i) {
